@@ -20,17 +20,10 @@ app.use(bodyParser.urlencoded({
 
 app.use("/dashboard",dashboardController) 
 app.use("/register",registerController) 
-app.use("/login",loginController) 
+app.use("/",loginController) 
 app.use("/userRoles",rolesController) 
 app.use("/projects",projectController) 
 app.use("/tickets",ticketController) 
-
-
-app.get('/forgot-password',function(req,res){
-
-    res.render('forgot-password');
-   
-});
 
 app.listen(port,function(err){
     if(err)

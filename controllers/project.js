@@ -68,7 +68,6 @@ router.post('/',function(req,res){
             d.Projects(function(result1){
                 if(result1!=false){
                     alert("creation success!")
-
                     res.render('projects',
                     { email: login.email1 ,
                          name: login.name1, 
@@ -87,7 +86,6 @@ router.get('/details/',(req,res)=>{
    d.ProjectDetails(req.query.pid,function(result){
        if(result!=false){
                     d.Users(req.query.pid,function(result1){
-                        
                         if(result1!=false){
                     //     console.log("ooo "+result1[1].uid)
                        
@@ -100,9 +98,10 @@ router.get('/details/',(req,res)=>{
                                 //console.log(arr)
                                 d.TicketDetails(req.query.pid,(resul)=>{
                                     if(resul.length==0 || resul!=false){
-                                        d.LogP(req.query.pid,(resultt)=>{
+                                        d.LogP(req.query.pid,(resultt)=>{    
                                             if(resultt.length==0 || resultt!=false){
                                                 d.LogA(req.query.pid,(resultz)=>{
+                                                    console.log("doja "+resultz)
                                                     if(resultz.length==0 || resultz!=false){
                                                         console.log("ll "+resultt.length)
                                         res.render('projectDetails',
@@ -180,7 +179,7 @@ router.post('/details',(req,res)=>{
         d.Update(req.query.pid,req.body.name,req.body.desc,req.body.man,req.body.dev,function(result2){
             alert("update success!")
             res.redirect("../projects/details?pid="+req.query.pid)
-            })
+        })
     }             
         
 })

@@ -85,7 +85,7 @@ class ManageLogin {
 
     countRole(role,uid,callback){
         if(role == "admin"){
-            let sql = `select count(*) as cnt from users group by role order by role`
+            let sql = `select count(*) as cnt,role from users group by role`
             con.query(sql,(err,rows)=>{
                 if(!err){
                     return callback(rows)
@@ -130,7 +130,7 @@ class ManageLogin {
 
     countProject(role,uid,callback){
         if(role == "admin"){
-            let sql = `select count(*) as cnt from project;            `
+            let sql = `select count(*) as cnt from project;`
             con.query(sql,(err,rows)=>{
                 if(!err){
                     return callback(rows)

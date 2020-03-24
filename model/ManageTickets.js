@@ -44,6 +44,8 @@ class ManageTickets {
         let sql = `select * from project`;
         con.query(sql, (err, rows) => {
             if (!err) {
+                if(rows[0]==undefined)
+                return callback(0)
                 return callback(rows)
             } else {
                 return callback(false)
@@ -66,6 +68,8 @@ class ManageTickets {
         let sql = `select * from users where role="developer"`;
         con.query(sql, (err, rows) => {
             if (!err) {
+                if(rows[0]==undefined)
+                return callback(0)
                 return callback(rows)
             } else {
                 return callback(false)
@@ -77,6 +81,8 @@ class ManageTickets {
         let sql = `select * from users where role="client"`;
         con.query(sql, (err, rows) => {
             if (!err) {
+                if(rows[0]==undefined)
+                return callback(0)
                 return callback(rows)
             } else {
                 return callback(false)
@@ -85,7 +91,7 @@ class ManageTickets {
     }
 
     Insert(name, desc, dev, client, project, priority, type, status, callback) {
-        let sql = `insert into ticket values(0,'${name}','${desc}',${dev},${client},${project},'${priority}','${type}','${status}',now())`
+        let sql = `insert into ticket values(0,'${name}','${desc}',${dev},${client},${project},'${priority}','${status}','${type}',now())`
         con.query(sql, (err) => {
             if (!err) {
                 return callback(true)

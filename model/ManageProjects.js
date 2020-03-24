@@ -76,6 +76,7 @@ class ManageProjects {
                 }    
 
             UserDetails(uid,callback){
+                console.log("uid "+uid[0].uid)
                 var s="("
                for(var i=0;i<uid.length;i++){
                     if(i==uid.length-1)
@@ -84,7 +85,7 @@ class ManageProjects {
                     s=s+uid[i].uid+","
                }
                s=s+")"
-               //console.log("s "+s)
+               console.log("ss "+s)
                 let sql = `select * from users where uid in${s}`;
                 con.query(sql,(err,rows)=>{
                     if(!err){
@@ -110,6 +111,7 @@ class ManageProjects {
                     }
                 })
                 let sql2=``,sql3=``
+                if(Array.isArray(dev)){
                 for(var i=0;i<dev.length;i++){
                 sql2 = `select uid from users where name='${dev[i]}'`
                 con.query(sql2,(err,rows)=>{
@@ -118,7 +120,15 @@ class ManageProjects {
                     con.query(sql3)
                 }
                 })
-                }
+                }}else{
+                    sql2 = `select uid from users where name='${dev}'`
+                        con.query(sql2,(err,rows)=>{
+                            if(!err){
+                            sql3 = `insert into assignment values('${pids[0]}','${rows[0].uid}')`
+                            con.query(sql3)
+                        }
+                        })   
+                    }
                 //console.log("man "+man.length)
                 let sql4 = `select uid from users where name='${man}'`
                 con.query(sql4,(err,rows)=>{
@@ -138,33 +148,40 @@ class ManageProjects {
     }
 
     Update(pid1,name,desc,man,dev,callback){
-        //console.log(pid1+"\n"+name+"\n"+desc+"\n"+man+"\n"+dev)
+        console.log(pid1+"\n"+name+"\n"+desc+"\n"+man+"\ndevri"+dev)
         let sql=`update project set name='${name}',description='${desc}' where pid=${pid1}`
         con.query(sql,(err)=>{
             if(!err){
                 let sql2=`delete from assignment where pid=${pid1}`
                 con.query(sql2,(err,rows)=>{
                     if(err)
-                    console.log(err)
+                    console.log("err1\n"+err)
                 })
-                sql2=`insert into assignment values(${pid1},'${man}')`
+                sql2=`insert into assignment values(${pid1},${man})`
                 con.query(sql2,(err,rows)=>{
                     if(err)
-                    console.log(err)
+                    console.log("err2\n"+err)
                 })
                 let sql3=``
+                if(Array.isArray(dev)){
                 for(var i=0;i<dev.length;i++){
-                sql3 = `insert into assignment values(${pid1},'${dev[i]}')`
+                sql3 = `insert into assignment values(${pid1},${dev[i]})`
                 con.query(sql3,(err,rows)=>{
                     if(err)
-                    console.log(err)
+                    console.log("err3aa\n"+err)
                 })
+                }}else{
+                    sql3 = `insert into assignment values(${pid1},${dev})`
+                    con.query(sql3,(err,rows)=>{
+                        if(err)
+                        console.log("err3bb\n"+err)
+                    })
                 }
                 //console.log("man "+man.length)
                 return callback(true)
             }
             else{
-                console.log(err)
+                console.log("err4\n"+err)
                 return callback(false);
             }
         })
@@ -205,7 +222,8 @@ class ManageProjects {
                     s=s+rows[i].uid+","
                }
                s=s+")"
-               console.log("s "+s)
+               console.log("sF "+s)
+              if (s=="()") return callback(10)
                             let sql2 = 
 `select users.*,historyAssignment.ts from users,historyAssignment where users.uid=historyAssignment.uid and users.uid in ${s}`
                             con.query(sql2,(err1,rowz)=>{

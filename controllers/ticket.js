@@ -65,11 +65,14 @@ router.get('/create',function(req,res){
     //console.log(choice.Developers+"\n"+choice.Managers)
     var d = new choice()
 d.Dev(function(result){
-    if(result!=false){
+    console.log("heree"+result)
+    //if(result!=false){
         d.Client(function(result1){
-            if(result1!=false){
+            console.log("heree"+result1)
+           // if(result1!=false){
                 d.ProjectDetails(function(result2){
-                    if(result2!=false){
+                    //if(result2!=false){
+                        console.log("heree")
                         return res.render('createTicket' ,
                         {   email: login.email1 , 
                             name: login.name1, 
@@ -78,16 +81,12 @@ d.Dev(function(result){
                             client1: result1,
                             project1: result2
                         })
-                        }
-                    
-
+                      //  }
                 })
 
-            }
-        })
-        
-   
-    }
+           // }
+        })      
+   // }
 })
 
 });
@@ -96,6 +95,8 @@ router.post('/',function(req,res){
     //res.send(req.body.name+req.body.desc+req.body.man+req.body.dev)
   console.log(req.body)
     var d = new choice()
+    console.log("idss "+login.uid1)
+    if(login.role1=="admin"){
     d.Insert(req.body.name,req.body.desc,req.body.developer,req.body.client,req.body.project,req.body.priority,req.body.type,req.body.status,function(result1){
         if(result1==true){
             d.Tickets(function(result){
@@ -109,7 +110,25 @@ router.post('/',function(req,res){
                 }
             })
              }
-    })
+    })}
+    if(login.role1=="client"){
+        d.Dev(function(resz){
+            d.Insert(req.body.name,req.body.desc,resz[0].uid,login.uid1,req.body.project,"important",req.body.type,"incomplete",function(result1){
+                if(result1==true){
+                    d.Tickets(function(result){
+                        if(result!=false){
+                            res.render('tickets',
+                            { email: login.email1 ,
+                                 name: login.name1, 
+                                 role: login.role1,
+                                tickets: result    
+                            })
+                        }
+                    })
+                     }
+            })
+        })
+        }
 })
 
 router.get('/delete',(req,res)=>{
@@ -214,13 +233,13 @@ router.post('/details',(req,res)=>{
 
      if(login.role1=="client"){
         // console.log(req.query.tid+req.body.name+req.body.desc+"\ndev\n"+req.body.devs+"\ndev\n"+req.body.priority)
-         if(req.body.type=="" || req.body.project=="" || req.body.name=="" || req.body.desc==""){
+         if(req.body.type=="" || req.body.project=="" || req.body.name=="" || req.body.desc=="" || req.body.status==""){
              alert("fields cant be empty!")
              res.redirect("back")
          }else{
          d.TicketDetails(req.query.tid,function(resz){
              //res[0].assigned_dev
-             d.Update(req.query.tid,req.body.name,req.body.desc,resz[0].assigned_dev,resz[0].submitter,req.body.project,resz[0].priority,resz[0].status,req.body.type,function(result2){
+             d.Update(req.query.tid,req.body.name,req.body.desc,resz[0].assigned_dev,resz[0].submitter,req.body.project,resz[0].priority,req.body.status,req.body.type,function(result2){
                  if(result2!=false){
                  alert("update success!")
                  res.redirect("../tickets/details?tid="+req.query.tid)

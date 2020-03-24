@@ -9,11 +9,10 @@ router.get('/',function(req,res){
     //console.log("id "+login.uid1);
     var d = new data()
     d.countProject(login.role1,login.uid1,function(result){
-        //if(result!=false){
-            console.log("res"+result)
+        //if(result!=false){ 
             d.countRole(login.role1,login.uid1,function(result1){
-                //if(result1!=false){
-                    console.log("res1"+result1)
+                if(result1==false) result1=0
+                console.log(result1)
                 d.countTicket(login.role1,login.uid1,function(result2){
                     //if(result2!=false){
                         console.log("res2"+result2)

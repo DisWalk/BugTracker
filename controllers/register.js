@@ -56,7 +56,7 @@ else if (pwd == 4) {
 var d = new data(name,email,role,pwd);
 
 d.insertData()
-res.redirect("login");
+res.redirect("/");
 
 });
 
